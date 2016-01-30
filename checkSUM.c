@@ -1,6 +1,6 @@
 /*
 * --------------------------------------------------------
-*	 			Last Edit By: Abdallah Ali 30-1-2016
+*	 Last Edit By: Abdallah Ali 30-1-2016
 * --------------------------------------------------------
 * Fast CheckSUM algorithm (without error correction)
 * Used to confirm that data is transferred correctly

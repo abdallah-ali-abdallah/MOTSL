@@ -11,10 +11,14 @@ Pin configurations
 -------------------
 STM32 -> nRF24
 -------------------
-PB12 -> CSN
-PB13 -> SCK
-PB14 -> MISO
-PB15 -> MOSI
+PB12 -> CSN,
+
+PB13 -> SCK,
+
+PB14 -> MISO,
+
+PB15 -> MOSI,
+
 -------------------
 
 

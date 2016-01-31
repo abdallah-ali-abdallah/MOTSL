@@ -1,5 +1,5 @@
-########################### nRF24l01 Driver for STM32, Tested on STM32F103 ###########################
-
+nRF24l01 Driver for STM32, Tested on STM32F103
+------------------------------------------------
 This driver uses CMSIS libraries
 SPI2  is used to connect the Microcontroller to the Radio chip
 Examples tested using ARM-GCC-complier using EmBlocks IDE (also CoIDE is tested)
@@ -11,10 +11,10 @@ Pin configurations
 -------------------
 STM32 -> nRF24
 -------------------
-PB12 | CSN
-PB13 | SCK
-PB14 | MISO
-PB15 | MOSI
+PB12 -> CSN
+PB13 -> SCK
+PB14 -> MISO
+PB15 -> MOSI
 -------------------
 
 

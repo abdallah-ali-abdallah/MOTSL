@@ -11,13 +11,13 @@ Pin configurations
 -------------------
 STM32 -> nRF24
 -------------------
-PB12 -> CSN,
+PB12 -> CSN
 
-PB13 -> SCK,
+PB13 -> SCK
 
-PB14 -> MISO,
+PB14 -> MISO
 
-PB15 -> MOSI,
+PB15 -> MOSI
 
 -------------------
 
@@ -25,5 +25,7 @@ PB15 -> MOSI,
 Need to be added:
 
 1- IRQ handler
+
 2- enable the stand-by mode and "CE" pin
+
 3- Enable Autoacknowledge & CRC

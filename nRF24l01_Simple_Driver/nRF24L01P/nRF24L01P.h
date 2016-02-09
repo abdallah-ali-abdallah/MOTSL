@@ -1,4 +1,3 @@
-
 #define ADR_WIDTH 5
 
 #define RX_PLOAD_WIDTH 20
@@ -21,7 +20,7 @@ unsigned char nRF24L01_Config(unsigned char freq,unsigned char power,unsigned ch
 void RX_Mode(void);
 void TX_Mode(void);
 void nRF24L01_TxPacket(unsigned char * tx_buf);
-unsigned char nRF24L01_RxPacket(unsigned char* rx_buf);
+uint8_t nRF24L01_RxPacket(unsigned char *rx_buf);
 void nRF24L01_HW_Init(void);
 void nRF24L01_Set_TX_Address(unsigned char A,unsigned char B,unsigned char C,unsigned char D,unsigned char E);
 void nRF24L01_Set_RX_Address(unsigned char A,unsigned char B,unsigned char C,unsigned char D,unsigned char E);

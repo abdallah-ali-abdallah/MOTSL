@@ -6,7 +6,7 @@
 
 //Define the commands for operate the nRF24L01P
 #define READ_nRF_REG        0x00  	// Command for read register
-#define WRITE_nRF_REG       0x20 	// Command for read register
+#define WRITE_nRF_REG       0x20 	// Command for read(WRITE) register
 #define RD_RX_PLOAD     0x61  	// Command for read Rx payload
 #define WR_TX_PLOAD     0xA0  	// Command for write Tx payload
 #define FLUSH_TX        0xE1 	// Command for flush Tx FIFO
@@ -122,7 +122,7 @@ unsigned char nRF24L01_Config(unsigned char freq, unsigned char power, unsigned 
 		nRF24L01_power_rate|=0x02;
 	else if (Pm18dBm == power)
 		nRF24L01_power_rate|=0x00;
-	else 
+	else
 		return 0;
 
 	if (R2mbps == Rate)
@@ -135,7 +135,7 @@ unsigned char nRF24L01_Config(unsigned char freq, unsigned char power, unsigned 
 		return 0;
 
 	return 1;
-	
+
 }
 
 void RX_Mode(void)
@@ -176,16 +176,26 @@ void TX_Mode(void)
 
 void nRF24L01_TxPacket(unsigned char * tx_buf)
 {
-
+	CE_high(); //Set CE pin
 	SPI_Write_Buf(WRITE_nRF_REG + RX_ADDR_P0, TX_ADDRESS, ADR_WIDTH);
 	SPI_Write_Buf(WR_TX_PLOAD, tx_buf, TX_PLOAD_WIDTH);
-
+	CE_low(); //Reset CE pin
 
 }
 
-unsigned char nRF24L01_RxPacket(unsigned char* rx_buf)
-{unsigned char flag=0;
- unsigned char status;
+void CE_high()
+{
+	GPIO_SetBits(GPIOA,GPIO_Pin_11);
+}
+
+void CE_low()
+{
+	GPIO_ResetBits(GPIOA,GPIO_Pin_11);
+}
+
+uint8_t nRF24L01_RxPacket(unsigned char *rx_buf){
+	unsigned char flag=0;
+	unsigned char status;
 
 	status=SPI_RD_Reg(NRFRegSTATUS);
 
@@ -252,8 +262,8 @@ unsigned char SPI_Write_Buf(unsigned char reg, unsigned char *pBuf, unsigned cha
 		nRF24L01_SPI_Send_Byte(*pBuf);
 		 pBuf ++;
 	}
-	nRF24L01_SPI_NSS_H();    
-	return(status);   
+	nRF24L01_SPI_NSS_H();
+	return(status);
 }
 
 
@@ -301,11 +311,11 @@ void nRF24L01_HW_Init(void)
   	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
   	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
   	SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
-  	SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;//SPI_CPOL_High=模式3，时钟空闲为高 //SPI_CPOL_Low=模式0，时钟空闲为低
+  	SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;//SPI_CPOL_High=脛拢脢陆3拢卢脢卤脰脫驴脮脧脨脦陋赂脽 //SPI_CPOL_Low=脛拢脢陆0拢卢脢卤脰脫驴脮脧脨脦陋碌脥
   	SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;//SPI_CPHA_2Edge;//SPI_CPHA_1Edge, SPI_CPHA_2Edge;
   	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;//SPI_NSS_Soft;//SPI_NSS_Hard
   	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;//SPI_BaudRatePrescaler_2=18M;//SPI_BaudRatePrescaler_4=9MHz
-  	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;//数据从高位开始发送
+  	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;//脢媒戮脻麓脫赂脽脦禄驴陋脢录路垄脣脥
   	SPI_InitStructure.SPI_CRCPolynomial = 7;
 
 	SPI_Init(SPI2, &SPI_InitStructure);
@@ -319,6 +329,15 @@ void nRF24L01_HW_Init(void)
 
 	/* Enable SPI2  */
   	SPI_Cmd(SPI2, ENABLE);
+
+	 //CE
+  	 // GPIO configuration : OUTPUT : pin_11 : PORTA :
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+	GPIO_InitTypeDef cePin;
+	cePin.GPIO_Pin = GPIO_Pin_11;
+	cePin.GPIO_Speed = GPIO_Speed_50MHz;
+	cePin.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_Init(GPIOA, &cePin);
 }
 
 void nRF24L01_Delay_us(unsigned long n)
@@ -331,3 +350,4 @@ void nRF24L01_Delay_us(unsigned long n)
  	   while(i--);
   }
 }
+
